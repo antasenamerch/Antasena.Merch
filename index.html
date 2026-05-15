@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antasena Merch — Premium Merchandise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #f0d882;
+      --gold-dark: #8a6820;
+      --black: #060606;
+      --dark: #0e0e0e;
+      --card: #141414;
+      --border: #242424;
+      --text: #ececec;
+      --muted: #7a7a7a;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--black); color:var(--text); font-family:'Plus Jakarta Sans',sans-serif; overflow-x:hidden; }
+
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:var(--dark); }
+    ::-webkit-scrollbar-thumb { background:var(--gold); border-radius:2px; }
+
+    .container { max-width:1200px; margin:0 auto; padding:0 28px; }
+    .gold-text {
+      background:linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:22px 48px;
+      background:rgba(6,6,6,0.7);
+      backdrop-filter:blur(24px);
+      border-bottom:1px solid rgba(201,168,76,0.12);
+      transition:padding 0.4s, background 0.4s;
+    }
+    nav.scrolled { padding:14px 48px; background:rgba(6,6,6,0.96); }
+
+    .nav-logo {
+      font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700;
+      letter-spacing:3px;
+      background:linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .nav-links { display:flex; gap:36px; list-style:none; }
+    .nav-links a {
+      color:var(--muted); text-decoration:none;
+      font-size:0.78rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+      position:relative; transition:color 0.3s;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:-5px; left:0;
+      width:0; height:1px; background:var(--gold); transition:width 0.3s;
+    }
+    .nav-links a:hover { color:var(--gold); }
+    .nav-links a:hover::after { width:100%; }
+
+    .nav-cta {
+      padding:10px 26px; border:1px solid var(--gold); border-radius:40px;
+      color:var(--gold); background:transparent; font-size:0.78rem; font-weight:700;
+      letter-spacing:1.5px; text-transform:uppercase; text-decoration:none;
+      transition:all 0.3s; display:flex; align-items:center; gap:8px;
+    }
+    .nav-cta:hover { background:var(--gold); color:var(--black); box-shadow:0 0 30px rgba(201,168,76,0.4); }
+
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:1001; }
+    .hamburger span { width:22px; height:2px; background:var(--gold); border-radius:2px; transition:all 0.3s; display:block; }
+    .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+    .mobile-nav {
+      position:fixed; inset:0; z-index:999;
+      background:rgba(6,6,6,0.98); backdrop-filter:blur(24px);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:48px;
+      opacity:0; pointer-events:none; transition:opacity 0.4s;
+    }
+    .mobile-nav.open { opacity:1; pointer-events:all; }
+    .mobile-nav a { font-family:'Cinzel',serif; font-size:1.8rem; color:var(--muted); text-decoration:none; letter-spacing:4px; transition:color 0.3s; }
+    .mobile-nav a:hover { color:var(--gold); }
+
+    /* ─── HERO ─── */
+    #hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+
+    .hero-bg {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 60% 80% at 15% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 85% 15%, rgba(201,168,76,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 50% 90%, rgba(201,168,76,0.04) 0%, transparent 50%);
+    }
+    .hero-grid {
+      position:absolute; inset:0;
+      background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);
+      background-size:72px 72px;
+      animation:gridShift 20s linear infinite;
+    }
+    @keyframes gridShift { from{background-position:0 0;} to{background-position:72px 72px;} }
+
+    #particles { position:absolute; inset:0; pointer-events:none; }
+    .particle {
+      position:absolute; border-radius:50%; background:var(--gold); opacity:0;
+      animation:floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform:translateY(100vh) scale(0); opacity:0; }
+      10% { opacity:0.7; }
+      90% { opacity:0.2; }
+      100% { transform:translateY(-5vh) scale(1.2); opacity:0; }
+    }
+
+    .hero-wrap { position:relative; z-index:2; text-align:center; padding:140px 24px 80px; }
+    .hero-eyebrow {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:9px 22px; border:1px solid rgba(201,168,76,0.35); border-radius:40px;
+      font-size:0.72rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold);
+      margin-bottom:36px;
+      animation:fadeSlideDown 0.9s ease forwards; opacity:0;
+    }
+    .hero-eyebrow .dot { width:6px; height:6px; background:var(--gold); border-radius:50%; animation:blink 1.8s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.3;transform:scale(0.7);} }
+
+    .hero-h1 {
+      font-family:'Cinzel',serif; font-size:clamp(3.5rem,10vw,8rem);
+      font-weight:900; line-height:0.9; letter-spacing:-3px;
+      animation:fadeSlideUp 0.9s ease 0.2s forwards; opacity:0;
+    }
+    .hero-sub {
+      display:block; font-size:clamp(1rem,3vw,2rem); font-weight:400;
+      letter-spacing:10px; color:var(--muted); margin-top:12px;
+    }
+
+    .hero-desc {
+      max-width:520px; margin:32px auto 52px;
+      font-size:1rem; line-height:1.9; color:var(--muted);
+      animation:fadeSlideUp 0.9s ease 0.4s forwards; opacity:0;
+    }
+
+    .hero-actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; animation:fadeSlideUp 0.9s ease 0.6s forwards; opacity:0; }
+
+    .btn-gold {
+      padding:17px 44px; background:linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      color:var(--black); border:none; border-radius:50px; font-size:0.88rem; font-weight:800;
+      letter-spacing:1px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:9px;
+      transition:all 0.4s; box-shadow:0 10px 40px rgba(201,168,76,0.35);
+    }
+    .btn-gold:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(201,168,76,0.5); }
+
+    .btn-outline {
+      padding:17px 44px; background:transparent; color:var(--text);
+      border:1px solid var(--border); border-radius:50px; font-size:0.88rem; font-weight:600;
+      letter-spacing:1px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:9px;
+      transition:all 0.4s;
+    }
+    .btn-outline:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-4px); background:rgba(201,168,76,0.06); }
+
+    .scroll-down {
+      position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      color:var(--muted); font-size:0.65rem; letter-spacing:2.5px; text-transform:uppercase;
+      animation:bounceY 2.5s ease infinite;
+    }
+    .scroll-down i { color:var(--gold); }
+    @keyframes bounceY { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(10px);} }
+
+    /* Stats Bar */
+    .stats-bar {
+      position:relative; z-index:2; max-width:860px; margin:0 auto;
+      padding:32px 56px;
+      background:rgba(20,20,20,0.85); backdrop-filter:blur(24px);
+      border:1px solid var(--border); border-radius:24px;
+      display:flex; justify-content:space-around; align-items:center;
+      gap:16px; flex-wrap:wrap;
+      animation:fadeSlideUp 0.9s ease 0.8s forwards; opacity:0;
+    }
+    .stat-item { text-align:center; }
+    .stat-num {
+      font-family:'Cinzel',serif; font-size:2.2rem; font-weight:800; line-height:1;
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .stat-lbl { font-size:0.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+    .stat-sep { width:1px; height:44px; background:var(--border); }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding:110px 0; }
+    .s-tag { display:inline-block; font-size:0.68rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+    .s-title { font-family:'Cinzel',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:700; line-height:1.2; }
+    .s-line { width:56px; height:2px; background:linear-gradient(90deg,var(--gold),transparent); margin:18px auto 0; }
+    .s-header { text-align:center; margin-bottom:72px; }
+    .s-header .s-line { margin:18px auto 0; }
+
+    /* ─── ABOUT ─── */
+    #about { background:var(--dark); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:88px; align-items:center; }
+
+    .about-img-wrap { position:relative; }
+    .about-frame {
+      position:relative; width:100%; aspect-ratio:4/5;
+      border-radius:24px; overflow:hidden;
+    }
+    .about-frame img { width:100%; height:100%; object-fit:cover; display:block; }
+    .about-placeholder {
+      width:100%; height:100%;
+      background:linear-gradient(145deg, #181818, #202020);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    }
+    .about-placeholder i { font-size:5rem; color:var(--gold); opacity:0.25; }
+    .about-placeholder p { font-size:0.78rem; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
+    /* photo hint overlay */
+    .photo-hint {
+      position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:12px; background:rgba(0,0,0,0.6); opacity:0; transition:opacity 0.3s; z-index:2; border-radius:24px;
+    }
+    .about-frame:hover .photo-hint { opacity:1; }
+    .photo-hint span { font-size:0.75rem; letter-spacing:2px; color:var(--gold); text-transform:uppercase; }
+
+    .about-frame::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(to bottom,transparent 55%,rgba(0,0,0,0.75));
+      pointer-events:none;
+    }
+    .about-deco {
+      position:absolute; top:24px; left:-24px; right:24px; bottom:-24px;
+      border:1px solid rgba(201,168,76,0.25); border-radius:24px; z-index:-1;
+    }
+    .about-badge {
+      position:absolute; bottom:28px; right:-32px;
+      background:var(--card); border:1px solid var(--border); border-radius:18px;
+      padding:22px 28px; text-align:center; z-index:3;
+      box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    }
+    .about-badge-n { font-family:'Cinzel',serif; font-size:2.2rem; font-weight:800; color:var(--gold); }
+    .about-badge-l { font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+
+    .about-text .s-header { text-align:left; margin-bottom:28px; }
+    .about-text .s-line { margin:18px 0 0; }
+    .about-p { color:var(--muted); line-height:1.9; font-size:0.93rem; margin-bottom:24px; }
+    .info-list { display:flex; flex-direction:column; gap:14px; margin-bottom:36px; }
+    .info-row {
+      display:flex; align-items:flex-start; gap:16px;
+      padding:16px 20px; background:rgba(201,168,76,0.04);
+      border:1px solid rgba(201,168,76,0.1); border-radius:14px;
+      transition:all 0.3s;
+    }
+    .info-row:hover { border-color:rgba(201,168,76,0.3); background:rgba(201,168,76,0.07); transform:translateX(4px); }
+    .info-ico { color:var(--gold); font-size:0.95rem; min-width:18px; margin-top:3px; }
+    .info-body { font-size:0.84rem; color:var(--muted); line-height:1.6; }
+    .info-body strong { color:var(--text); display:block; margin-bottom:2px; font-size:0.87rem; }
+    .socials { display:flex; gap:12px; }
+    .s-btn {
+      width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+      border:1px solid var(--border); border-radius:14px; color:var(--muted);
+      text-decoration:none; font-size:1rem; transition:all 0.3s;
+    }
+    .s-btn:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-4px); background:rgba(201,168,76,0.08); }
+    .s-btn.wa:hover { border-color:#25D366; color:#25D366; background:rgba(37,211,102,0.08); }
+    .s-btn.ig:hover { border-color:#E1306C; color:#E1306C; background:rgba(225,48,108,0.08); }
+    .s-btn.tt:hover { border-color:#69C9D0; color:#69C9D0; background:rgba(105,201,208,0.08); }
+
+    /* ─── PRODUCTS ─── */
+    #products { background:var(--black); }
+    .filter-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:52px; }
+    .f-btn {
+      padding:9px 26px; border:1px solid var(--border); border-radius:40px;
+      background:transparent; color:var(--muted); font-size:0.76rem; font-weight:600;
+      letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; font-family:inherit;
+      transition:all 0.3s;
+    }
+    .f-btn.active, .f-btn:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+
+    .prod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(285px,1fr)); gap:28px; }
+    .prod-card {
+      background:var(--card); border:1px solid var(--border); border-radius:22px;
+      overflow:hidden; cursor:pointer;
+      transition:transform 0.4s cubic-bezier(.25,.46,.45,.94), border-color 0.4s, box-shadow 0.4s;
+    }
+    .prod-card:hover { transform:translateY(-10px); border-color:rgba(201,168,76,0.35); box-shadow:0 28px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(201,168,76,0.1); }
+    .prod-img-wrap { position:relative; overflow:hidden; }
+    .prod-placeholder {
+      width:100%; aspect-ratio:1/1;
+      background:linear-gradient(145deg,#161616 0%,#1e1e1e 50%,#161616 100%);
+      background-size:200% 200%; animation:shim 3s ease infinite;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    }
+    @keyframes shim { 0%,100%{background-position:0% 0%;} 50%{background-position:100% 100%;} }
+    .prod-placeholder i { font-size:3.5rem; color:var(--gold); opacity:0.22; }
+    .prod-placeholder p { font-size:0.72rem; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; }
+    .prod-placeholder img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+    .prod-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,transparent 55%);
+      opacity:0; transition:opacity 0.35s;
+      display:flex; align-items:flex-end; padding:20px;
+    }
+    .prod-card:hover .prod-overlay { opacity:1; }
+
+    .prod-body { padding:22px; }
+    .prod-tag { font-size:0.64rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; display:block; }
+    .prod-name { font-family:'Cinzel',serif; font-size:0.98rem; font-weight:600; margin-bottom:10px; line-height:1.4; }
+    .prod-price { font-size:1.1rem; font-weight:800; color:var(--gold); margin-bottom:18px; }
+    .prod-price span { font-size:0.73rem; font-weight:400; color:var(--muted); }
+    .prod-btn {
+      width:100%; padding:12px; background:transparent;
+      border:1px solid rgba(201,168,76,0.3); border-radius:12px;
+      color:var(--gold); font-size:0.78rem; font-weight:700; letter-spacing:1px;
+      cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:all 0.3s; font-family:inherit;
+    }
+    .prod-btn:hover { background:var(--gold); color:var(--black); border-color:var(--gold); transform:none; }
+
+    /* ─── TESTIMONIALS ─── */
+    #testimonials { background:var(--dark); }
+    .testi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px; }
+    .testi-card {
+      background:var(--card); border:1px solid var(--border); border-radius:22px;
+      padding:30px; position:relative; overflow:hidden;
+      transition:all 0.4s;
+    }
+    .testi-card::before {
+      content:'\201C'; position:absolute; top:-16px; right:18px;
+      font-family:'Cinzel',serif; font-size:9rem; line-height:1;
+      color:rgba(201,168,76,0.07); pointer-events:none;
+    }
+    .testi-card:hover { transform:translateY(-6px); border-color:rgba(201,168,76,0.3); box-shadow:0 24px 48px rgba(0,0,0,0.35); }
+    .testi-card::after {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:0; transition:opacity 0.4s;
+    }
+    .testi-card:hover::after { opacity:1; }
+
+    .testi-head { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+    .testi-ava {
+      width:54px; height:54px; border-radius:50%;
+      border:2px solid var(--gold); object-fit:cover; flex-shrink:0;
+    }
+    .testi-ava-ph {
+      width:54px; height:54px; border-radius:50%;
+      border:2px solid var(--gold); flex-shrink:0;
+      background:linear-gradient(135deg,#1c1c1c,#282828);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Cinzel',serif; font-size:1.3rem; font-weight:700; color:var(--gold);
+    }
+    .testi-name { font-weight:700; font-size:0.95rem; margin-bottom:3px; }
+    .testi-loc { font-size:0.72rem; color:var(--muted); display:flex; align-items:center; gap:5px; }
+    .testi-loc i { color:var(--gold); font-size:0.6rem; }
+    .stars { display:flex; gap:4px; margin-bottom:14px; }
+    .stars i { color:var(--gold); font-size:0.82rem; }
+    .testi-txt { color:var(--muted); font-size:0.865rem; line-height:1.75; position:relative; }
+    .testi-foot {
+      margin-top:18px; padding-top:18px; border-top:1px solid var(--border);
+      font-size:0.72rem; color:var(--gold); display:flex; align-items:center; gap:7px;
+    }
+
+    /* ─── CTA ─── */
+    #contact { background:var(--black); }
+    .cta-box {
+      max-width:840px; margin:0 auto; padding:88px 72px;
+      background:linear-gradient(135deg,rgba(201,168,76,0.09),rgba(201,168,76,0.03));
+      border:1px solid rgba(201,168,76,0.2); border-radius:32px;
+      text-align:center; position:relative; overflow:hidden;
+    }
+    .cta-glow {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:600px; height:600px;
+      background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 65%);
+      animation:rotatePulse 12s linear infinite;
+    }
+    @keyframes rotatePulse { from{transform:translate(-50%,-50%) rotate(0deg) scale(1);} 50%{transform:translate(-50%,-50%) rotate(180deg) scale(1.1);} to{transform:translate(-50%,-50%) rotate(360deg) scale(1);} }
+    .cta-box > * { position:relative; z-index:1; }
+    .cta-title { font-family:'Cinzel',serif; font-size:clamp(1.7rem,3.5vw,2.8rem); font-weight:700; margin-bottom:18px; line-height:1.2; }
+    .cta-desc { color:var(--muted); font-size:1rem; line-height:1.85; max-width:560px; margin:0 auto 44px; }
+    .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+    /* ─── FOOTER ─── */
+    footer { background:var(--dark); border-top:1px solid var(--border); padding:52px 0; }
+    .foot-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+    .foot-logo { font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700; letter-spacing:3px; background:linear-gradient(135deg,var(--gold-light),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .foot-copy { font-size:0.78rem; color:var(--muted); }
+    .foot-socials { display:flex; gap:10px; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeSlideDown { from{opacity:0;transform:translateY(-22px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeSlideUp   { from{opacity:0;transform:translateY(32px);} to{opacity:1;transform:translateY(0);} }
+
+    .reveal        { opacity:0; transform:translateY(44px); transition:all 0.85s cubic-bezier(.25,.46,.45,.94); }
+    .reveal-l      { opacity:0; transform:translateX(-44px); transition:all 0.85s cubic-bezier(.25,.46,.45,.94); }
+    .reveal-r      { opacity:0; transform:translateX(44px); transition:all 0.85s cubic-bezier(.25,.46,.45,.94); }
+    .reveal.in, .reveal-l.in, .reveal-r.in { opacity:1; transform:none; }
+    .d1{transition-delay:.1s;} .d2{transition-delay:.18s;} .d3{transition-delay:.26s;}
+    .d4{transition-delay:.34s;} .d5{transition-delay:.42s;} .d6{transition-delay:.50s;}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:960px){
+      nav{padding:16px 24px;}
+      nav.scrolled{padding:12px 24px;}
+      .nav-links,.nav-cta{display:none;}
+      .hamburger{display:flex;}
+      .about-grid{grid-template-columns:1fr; gap:52px;}
+      .about-badge{right:-12px;}
+      .stats-bar{padding:24px 28px;}
+      .cta-box{padding:56px 32px;}
+    }
+    @media(max-width:600px){
+      .hero-wrap{padding:110px 16px 56px;}
+      .prod-grid{grid-template-columns:1fr 1fr; gap:14px;}
+      section{padding:76px 0;}
+    }
+    @media(max-width:400px){
+      .prod-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav id="nav">
+  <div class="nav-logo">ANTASENA</div>
+  <ul class="nav-links">
+    <li><a href="#about">Profil</a></li>
+    <li><a href="#products">Produk</a></li>
+    <li><a href="#testimonials">Testimoni</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+  <a href="https://wa.me/6289538325018" class="nav-cta" target="_blank"><i class="fab fa-whatsapp"></i>Pesan Sekarang</a>
+  <div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-nav" id="mnav">
+  <a href="#about"         onclick="closeMnav()">Profil</a>
+  <a href="#products"      onclick="closeMnav()">Produk</a>
+  <a href="#testimonials"  onclick="closeMnav()">Testimoni</a>
+  <a href="#contact"       onclick="closeMnav()">Kontak</a>
+  <a href="https://wa.me/6289538325018" target="_blank" onclick="closeMnav()">WhatsApp</a>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div id="particles"></div>
+
+  <div style="width:100%;position:relative;z-index:2;">
+    <div class="hero-wrap">
+      <div class="hero-eyebrow"><span class="dot"></span>✦ Premium Merchandise ✦<span class="dot"></span></div>
+      <h1 class="hero-h1">
+        <span class="gold-text">ANTASENA</span>
+        <span class="hero-sub">MERCH</span>
+      </h1>
+      <p class="hero-desc">
+        Hadirkan identitas terbaik Anda lewat produk merchandise premium berkualitas tinggi.
+        Desain eksklusif, bahan pilihan, kepuasan terjamin — dari Brebes untuk Indonesia.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn-gold"><i class="fas fa-shopping-bag"></i>Lihat Produk</a>
+        <a href="https://wa.me/6289538325018" class="btn-outline" target="_blank"><i class="fab fa-whatsapp"></i>Hubungi Kami</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num" data-target="500">0</div><div class="stat-lbl">Produk Terjual</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat-item"><div class="stat-num" data-target="200">0</div><div class="stat-lbl">Pelanggan Puas</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat-item"><div class="stat-num" data-target="5" data-suffix="★">0</div><div class="stat-lbl">Rating Bintang</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat-item"><div class="stat-num" data-target="3">0</div><div class="stat-lbl">Tahun Pengalaman</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-down"><span>Scroll</span><i class="fas fa-chevron-down"></i></div>
+</section>
+
+<!-- ═══════════ ABOUT / PROFILE ═══════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- FOTO PROFIL -->
+      <div class="about-img-wrap reveal-l">
+        <div class="about-frame">
+          <!-- ▼▼▼ GANTI PLACEHOLDER INI DENGAN FOTO ANDA ▼▼▼ -->
+          <!-- Cara 1: <img src="URL_FOTO_ANDA" alt="Pemilik Antasena Merch"> -->
+          <!-- Cara 2: Upload foto lalu masukkan path-nya sebagai src -->
+          <div class="about-placeholder">
+            <i class="fas fa-user-circle"></i>
+            <p>Foto Pemilik</p>
+          </div>
+          <!-- ▲▲▲ SELESAI ▲▲▲ -->
+          <div class="photo-hint">
+            <i class="fas fa-camera" style="font-size:2rem;color:var(--gold);"></i>
+            <span>Masukkan Foto Anda</span>
+          </div>
+        </div>
+        <div class="about-deco"></div>
+        <div class="about-badge">
+          <div class="about-badge-n">100%</div>
+          <div class="about-badge-l">Original</div>
+        </div>
+      </div>
+
+      <!-- TEKS PROFIL -->
+      <div class="about-text reveal-r">
+        <div class="s-header">
+          <div class="s-tag">✦ Tentang Kami</div>
+          <h2 class="s-title">Antasena <span class="gold-text">Merch</span></h2>
+          <div class="s-line" style="margin:18px 0 0;"></div>
+        </div>
+        <p class="about-p">
+          Antasena Merch adalah bisnis merchandise terpercaya yang hadir untuk memenuhi kebutuhan
+          Anda akan produk berkualitas tinggi. Kami berkomitmen menghadirkan produk dengan desain
+          eksklusif, bahan premium, dan pelayanan terbaik.
+        </p>
+        <p class="about-p">
+          Dengan pengalaman dan dedikasi penuh, kami terus berinovasi demi kepuasan setiap pelanggan.
+          Karena bagi kami, kepuasan Anda adalah kebanggaan kami.
+        </p>
+
+        <div class="info-list">
+          <div class="info-row">
+            <i class="fas fa-map-marker-alt info-ico"></i>
+            <div class="info-body">
+              <strong>Alamat</strong>
+              Jln. Sultan Agung Gang Anyerri Rt.02 Rw.02<br>
+              Desa Kupu, Kec. Wanasari, Kab. Brebes
+            </div>
+          </div>
+          <div class="info-row">
+            <i class="fab fa-whatsapp info-ico"></i>
+            <div class="info-body">
+              <strong>WhatsApp</strong>
+              0895383250185
+            </div>
+          </div>
+          <div class="info-row">
+            <i class="fas fa-clock info-ico"></i>
+            <div class="info-body">
+              <strong>Jam Operasional</strong>
+              Senin – Sabtu &nbsp;|&nbsp; 08.00 – 21.00 WIB
+            </div>
+          </div>
+        </div>
+
+        <div class="socials">
+          <a href="https://wa.me/6289538325018" class="s-btn wa" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://www.instagram.com/antasena_merch?igsh=MTlrM3d6MXZhZGw5Zw==" class="s-btn ig" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@coach_ary22?_r=1&_t=ZS-96NdPGdEyUU" class="s-btn tt" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRODUCTS ═══════════ -->
+<section id="products">
+  <div class="container">
+    <div class="s-header reveal">
+      <div class="s-tag">✦ Koleksi Kami</div>
+      <h2 class="s-title">Katalog <span class="gold-text">Produk</span></h2>
+      <div class="s-line"></div>
+    </div>
+
+    <div class="filter-row reveal">
+      <button class="f-btn active" onclick="setFilter(this)">Semua</button>
+      <button class="f-btn" onclick="setFilter(this)">Kaos</button>
+      <button class="f-btn" onclick="setFilter(this)">Hoodie</button>
+      <button class="f-btn" onclick="setFilter(this)">Aksesoris</button>
+      <button class="f-btn" onclick="setFilter(this)">Topi</button>
+    </div>
+
+    <div class="prod-grid">
+
+      <!-- ══ PRODUK 1 ══ -->
+      <div class="prod-card reveal d1">
+        <div class="prod-img-wrap">
+          <!-- ▼ FOTO PRODUK 1: hapus div .prod-placeholder lalu taruh <img src="..." class="prod-placeholder"> -->
+          <div class="prod-placeholder">
+            <i class="fas fa-tshirt"></i>
+            <p>Foto Produk 1</p>
+          </div>
+          <!-- ▲ selesai -->
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Premium%20Edition" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ New Arrival</span>
+          <div class="prod-name">Kaos Premium Edition</div>
+          <div class="prod-price">Rp 120.000 <span>/ pcs</span></div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Premium%20Edition" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 2 ══ -->
+      <div class="prod-card reveal d2">
+        <div class="prod-img-wrap">
+          <!-- ▼ FOTO PRODUK 2 -->
+          <div class="prod-placeholder">
+            <i class="fas fa-tshirt"></i>
+            <p>Foto Produk 2</p>
+          </div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Hoodie%20Signature" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Best Seller</span>
+          <div class="prod-name">Hoodie Signature Series</div>
+          <div class="prod-price">Rp 250.000 <span>/ pcs</span></div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Hoodie%20Signature" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 3 ══ -->
+      <div class="prod-card reveal d3">
+        <div class="prod-img-wrap">
+          <!-- ▼ FOTO PRODUK 3 -->
+          <div class="prod-placeholder">
+            <i class="fas fa-hat-cowboy"></i>
+            <p>Foto Produk 3</p>
+          </div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Topi%20Baseball" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Limited</span>
+          <div class="prod-name">Topi Baseball Exclusive</div>
+          <div class="prod-price">Rp 95.000 <span>/ pcs</span></div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Topi%20Baseball" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 4 ══ -->
+      <div class="prod-card reveal d4">
+        <div class="prod-img-wrap">
+          <!-- ▼ FOTO PRODUK 4 -->
+          <div class="prod-placeholder">
+            <i class="fas fa-bag-shopping"></i>
+            <p>Foto Produk 4</p>
+          </div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Totebag%20Premium" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Trending</span>
+          <div class="prod-name">Totebag Premium</div>
+          <div class="prod-price">Rp 75.000 <span>/ pcs</span></div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Totebag%20Premium" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 5 ══ -->
+      <div class="prod-card reveal d5">
+        <div class="prod-img-wrap">
+          <!-- ▼ FOTO PRODUK 5 -->
+          <div class="prod-placeholder">
+            <i class="fas fa-tshirt"></i>
+            <p>Foto Produk 5</p>
+          </div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Oversize" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Popular</span>
+          <div class="prod-name">Kaos Oversize Unisex</div>
+          <div class="prod-price">Rp 145.000 <span>/ pcs</span></div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Oversize" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 6 ══ -->
+      <div class="prod-card reveal d6">
+        <div class="prod-img-wrap">
+          <!-- ▼ FOTO PRODUK 6 -->
+          <div class="prod-placeholder">
+            <i class="fas fa-star"></i>
+            <p>Foto Produk 6</p>
+          </div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Paket%20Bundle" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Special</span>
+          <div class="prod-name">Paket Bundle Spesial</div>
+          <div class="prod-price">Rp 350.000 <span>/ paket</span></div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Paket%20Bundle" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /prod-grid -->
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+<section id="testimonials">
+  <div class="container">
+    <div class="s-header reveal">
+      <div class="s-tag">✦ Kepuasan Pelanggan</div>
+      <h2 class="s-title">Apa Kata <span class="gold-text">Mereka</span></h2>
+      <div class="s-line"></div>
+    </div>
+
+    <div class="testi-grid">
+
+      <!-- T1 -->
+      <div class="testi-card reveal d1">
+        <div class="testi-head">
+          <!-- ▼ FOTO TESTIMONI 1: ganti div.testi-ava-ph dengan <img src="..." class="testi-ava"> -->
+          <div class="testi-ava-ph">A</div>
+          <div>
+            <div class="testi-name">Anisa Rahmawati</div>
+            <div class="testi-loc"><i class="fas fa-map-pin"></i> Semarang, Jawa Tengah</div>
+          </div>
+        </div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-txt">"Kualitasnya luar biasa! Bahan kaosnya adem dan nyaman dipakai sehari-hari. Desainnya keren banget, banyak yang nanya beli di mana. Packing rapi, pengiriman cepat. Pasti order lagi! ⭐⭐⭐⭐⭐"</p>
+        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Kaos Premium Edition</div>
+      </div>
+
+      <!-- T2 -->
+      <div class="testi-card reveal d2">
+        <div class="testi-head">
+          <div class="testi-ava-ph">R</div>
+          <div>
+            <div class="testi-name">Rizky Firmansyah</div>
+            <div class="testi-loc"><i class="fas fa-map-pin"></i> Brebes, Jawa Tengah</div>
+          </div>
+        </div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-txt">"Hoodie-nya kualitas premium banget! Hangat, tebal, dan gambarnya tidak mudah luntur meski dicuci berkali-kali. Pelayanan seller juga ramah dan responsif. Recommended banget buat yang cari merch berkualitas!"</p>
+        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Hoodie Signature Series</div>
+      </div>
+
+      <!-- T3 -->
+      <div class="testi-card reveal d3">
+        <div class="testi-head">
+          <div class="testi-ava-ph">D</div>
+          <div>
+            <div class="testi-name">Dewi Cahyani</div>
+            <div class="testi-loc"><i class="fas fa-map-pin"></i> Tegal, Jawa Tengah</div>
+          </div>
+        </div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-txt">"Udah pesan 3 kali dan selalu puas! Topi baseball-nya keren dan anti-kusut. Harga sangat worth it untuk kualitas segini. Seller juga fast respon. Two thumbs up! 👍👍"</p>
+        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Topi Baseball Exclusive</div>
+      </div>
+
+      <!-- T4 -->
+      <div class="testi-card reveal d4">
+        <div class="testi-head">
+          <div class="testi-ava-ph">F</div>
+          <div>
+            <div class="testi-name">Fajar Nugroho</div>
+            <div class="testi-loc"><i class="fas fa-map-pin"></i> Cirebon, Jawa Barat</div>
+          </div>
+        </div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-txt">"Totebagnya kuat banget, bisa nampung banyak barang dan jahitannya rapi. Desainnya estetik dan elegan. Sudah kupakai setiap hari dan masih awet. Antasena Merch memang juara!"</p>
+        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Totebag Premium</div>
+      </div>
+
+      <!-- T5 -->
+      <div class="testi-card reveal d5">
+        <div class="testi-head">
+          <div class="testi-ava-ph">S</div>
+          <div>
+            <div class="testi-name">Sinta Maharani</div>
+            <div class="testi-loc"><i class="fas fa-map-pin"></i> Purwokerto, Jawa Tengah</div>
+          </div>
+        </div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-txt">"Pesan paket bundle untuk keluarga dan hasilnya memuaskan! Semua bahan berkualitas dan nyaman dipakai. Harga sangat bersahabat untuk kualitas premium. Terima kasih Antasena Merch! 🙏"</p>
+        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Paket Bundle Spesial</div>
+      </div>
+
+      <!-- T6 -->
+      <div class="testi-card reveal d6">
+        <div class="testi-head">
+          <div class="testi-ava-ph">B</div>
+          <div>
+            <div class="testi-name">Budi Santoso</div>
+            <div class="testi-loc"><i class="fas fa-map-pin"></i> Slawi, Jawa Tengah</div>
+          </div>
+        </div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p class="testi-txt">"Paling suka pelayanannya, ramah dan sabar melayani pesanan custom. Hasilnya sesuai ekspektasi bahkan melebihi! Kualitas sablon tahan lama, sudah 6 bulan masih bagus. Wajib coba!"</p>
+        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Kaos Oversize Unisex</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA / CONTACT ═══════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="cta-glow"></div>
+      <h2 class="cta-title">Siap Pesan Produk <span class="gold-text">Premium</span> Anda?</h2>
+      <p class="cta-desc">
+        Hubungi kami sekarang dan dapatkan konsultasi gratis. Kami siap membantu
+        mewujudkan merchandise impian Anda dengan kualitas terbaik dan harga terjangkau.
+      </p>
+      <div class="cta-row">
+        <a href="https://wa.me/6289538325018?text=Halo%20Antasena%20Merch!%20Saya%20ingin%20memesan%20produk." class="btn-gold" target="_blank">
+          <i class="fab fa-whatsapp"></i>Chat WhatsApp
+        </a>
+        <a href="https://www.instagram.com/antasena_merch?igsh=MTlrM3d6MXZhZGw5Zw==" class="btn-outline" target="_blank">
+          <i class="fab fa-instagram"></i>Instagram
+        </a>
+        <a href="https://www.tiktok.com/@coach_ary22?_r=1&_t=ZS-96NdPGdEyUU" class="btn-outline" target="_blank">
+          <i class="fab fa-tiktok"></i>TikTok
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="container">
+    <div class="foot-inner">
+      <div class="foot-logo">ANTASENA MERCH</div>
+      <div class="foot-copy">© 2024 Antasena Merch — All rights reserved.</div>
+      <div class="foot-socials">
+        <a href="https://wa.me/6289538325018" class="s-btn wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/antasena_merch?igsh=MTlrM3d6MXZhZGw5Zw==" class="s-btn ig" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@coach_ary22?_r=1&_t=ZS-96NdPGdEyUU" class="s-btn tt" target="_blank"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Navbar scroll ──
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+  // ── Hamburger ──
+  const hbg = document.getElementById('hbg');
+  const mnav = document.getElementById('mnav');
+  hbg.addEventListener('click', () => { hbg.classList.toggle('open'); mnav.classList.toggle('open'); });
+  function closeMnav() { hbg.classList.remove('open'); mnav.classList.remove('open'); }
+
+  // ── Particles ──
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 35; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const sz = Math.random() * 3 + 1;
+    p.style.cssText = `
+      left:${Math.random()*100}%; width:${sz}px; height:${sz}px;
+      animation-duration:${Math.random()*18+10}s;
+      animation-delay:${Math.random()*18}s;
+    `;
+    pc.appendChild(p);
+  }
+
+  // ── Counter animation ──
+  let counted = false;
+  const sBar = document.querySelector('.stats-bar');
+  function runCounters() {
+    if (counted) return; counted = true;
+    document.querySelectorAll('[data-target]').forEach(el => {
+      const target = +el.dataset.target;
+      const suffix = el.dataset.suffix || '+';
+      let n = 0; const step = target / 55;
+      const t = setInterval(() => {
+        n += step;
+        if (n >= target) { n = target; clearInterval(t); }
+        el.textContent = (target === 5 ? '⭐ ' : '') + Math.floor(n) + (target < 10 ? suffix : suffix);
+      }, 28);
+    });
+  }
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) runCounters(); }, { threshold: 0.4 }).observe(sBar);
+
+  // ── Scroll reveal ──
+  const revEls = document.querySelectorAll('.reveal,.reveal-l,.reveal-r');
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+  revEls.forEach(el => ro.observe(el));
+
+  // ── Filter buttons ──
+  function setFilter(btn) {
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── Smooth active nav link highlight ──
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (scrollY >= s.offsetTop - 120) cur = s.id; });
+    links.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#'+cur ? 'var(--gold)' : '';
+    });
+  });
+</script>
+</body>
+</html>
