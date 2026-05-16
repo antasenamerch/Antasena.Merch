@@ -216,7 +216,6 @@
     }
     .about-placeholder i { font-size:5rem; color:var(--gold); opacity:0.25; }
     .about-placeholder p { font-size:0.78rem; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
-    /* photo hint overlay */
     .photo-hint {
       position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
       gap:12px; background:rgba(0,0,0,0.6); opacity:0; transition:opacity 0.3s; z-index:2; border-radius:24px;
@@ -278,7 +277,7 @@
     }
     .f-btn.active, .f-btn:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
 
-    .prod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(285px,1fr)); gap:28px; }
+    .prod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:28px; }
     .prod-card {
       background:var(--card); border:1px solid var(--border); border-radius:22px;
       overflow:hidden; cursor:pointer;
@@ -291,11 +290,14 @@
       background:linear-gradient(145deg,#161616 0%,#1e1e1e 50%,#161616 100%);
       background-size:200% 200%; animation:shim 3s ease infinite;
       display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+      position:relative;
+    }
+    .prod-img-wrap img {
+      width:100%; aspect-ratio:1/1; object-fit:cover; display:block;
     }
     @keyframes shim { 0%,100%{background-position:0% 0%;} 50%{background-position:100% 100%;} }
     .prod-placeholder i { font-size:3.5rem; color:var(--gold); opacity:0.22; }
     .prod-placeholder p { font-size:0.72rem; letter-spacing:2.5px; color:var(--muted); text-transform:uppercase; }
-    .prod-placeholder img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 
     .prod-overlay {
       position:absolute; inset:0;
@@ -307,9 +309,7 @@
 
     .prod-body { padding:22px; }
     .prod-tag { font-size:0.64rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; display:block; }
-    .prod-name { font-family:'Cinzel',serif; font-size:0.98rem; font-weight:600; margin-bottom:10px; line-height:1.4; }
-    .prod-price { font-size:1.1rem; font-weight:800; color:var(--gold); margin-bottom:18px; }
-    .prod-price span { font-size:0.73rem; font-weight:400; color:var(--muted); }
+    .prod-name { font-family:'Cinzel',serif; font-size:0.98rem; font-weight:600; margin-bottom:18px; line-height:1.4; }
     .prod-btn {
       width:100%; padding:12px; background:transparent;
       border:1px solid rgba(201,168,76,0.3); border-radius:12px;
@@ -317,10 +317,28 @@
       cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;
       transition:all 0.3s; font-family:inherit;
     }
-    .prod-btn:hover { background:var(--gold); color:var(--black); border-color:var(--gold); transform:none; }
+    .prod-btn:hover { background:var(--gold); color:var(--black); border-color:var(--gold); }
 
     /* ─── TESTIMONIALS ─── */
     #testimonials { background:var(--dark); }
+
+    /* Tabs */
+    .testi-tabs {
+      display:flex; gap:12px; justify-content:center; margin-bottom:52px; flex-wrap:wrap;
+    }
+    .t-tab {
+      padding:10px 30px; border:1px solid var(--border); border-radius:40px;
+      background:transparent; color:var(--muted); font-size:0.78rem; font-weight:600;
+      letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; font-family:inherit;
+      transition:all 0.3s; display:flex; align-items:center; gap:8px;
+    }
+    .t-tab.active, .t-tab:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+    .t-tab i { font-size:0.85rem; }
+
+    .testi-panel { display:none; }
+    .testi-panel.active { display:block; }
+
+    /* Review grid */
     .testi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px; }
     .testi-card {
       background:var(--card); border:1px solid var(--border); border-radius:22px;
@@ -363,25 +381,142 @@
       font-size:0.72rem; color:var(--gold); display:flex; align-items:center; gap:7px;
     }
 
+    /* Photo grid */
+    .testi-photo-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:20px;
+    }
+    .testi-photo-card {
+      background:var(--card); border:1px solid var(--border); border-radius:18px;
+      overflow:hidden; cursor:pointer;
+      transition:transform 0.4s cubic-bezier(.25,.46,.45,.94), border-color 0.4s, box-shadow 0.4s;
+    }
+    .testi-photo-card:hover {
+      transform:translateY(-8px);
+      border-color:rgba(201,168,76,0.4);
+      box-shadow:0 24px 48px rgba(0,0,0,0.5);
+    }
+    .testi-photo-wrap {
+      position:relative; width:100%; aspect-ratio:1/1; overflow:hidden;
+    }
+    .testi-photo-wrap img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform 0.5s ease;
+    }
+    .testi-photo-card:hover .testi-photo-wrap img { transform:scale(1.06); }
+    .testi-photo-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 60%);
+      display:flex; align-items:flex-end; padding:16px;
+      opacity:0; transition:opacity 0.35s;
+    }
+    .testi-photo-card:hover .testi-photo-overlay { opacity:1; }
+    .testi-photo-label {
+      font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold);
+    }
+    .testi-photo-foot {
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .testi-photo-num {
+      font-family:'Cinzel',serif; font-size:0.78rem; font-weight:600; color:var(--muted);
+    }
+    .testi-photo-stars { display:flex; gap:3px; }
+    .testi-photo-stars i { color:var(--gold); font-size:0.7rem; }
+
+    /* Lightbox */
+    .lightbox {
+      position:fixed; inset:0; z-index:9999;
+      background:rgba(0,0,0,0.95);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none; transition:opacity 0.3s;
+    }
+    .lightbox.open { opacity:1; pointer-events:all; }
+    .lightbox img {
+      max-width:90vw; max-height:90vh; object-fit:contain;
+      border-radius:12px; border:1px solid rgba(201,168,76,0.2);
+    }
+    .lightbox-close {
+      position:absolute; top:24px; right:32px;
+      font-size:2rem; color:var(--gold); cursor:pointer;
+      background:none; border:none; line-height:1; transition:opacity 0.2s;
+    }
+    .lightbox-close:hover { opacity:0.6; }
+
     /* ─── CTA ─── */
     #contact { background:var(--black); }
     .cta-box {
-      max-width:840px; margin:0 auto; padding:88px 72px;
+      max-width:1100px; margin:0 auto; padding:0;
       background:linear-gradient(135deg,rgba(201,168,76,0.09),rgba(201,168,76,0.03));
       border:1px solid rgba(201,168,76,0.2); border-radius:32px;
-      text-align:center; position:relative; overflow:hidden;
+      position:relative; overflow:hidden;
+      display:grid; grid-template-columns:1fr 1fr;
     }
     .cta-glow {
-      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      width:600px; height:600px;
-      background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 65%);
-      animation:rotatePulse 12s linear infinite;
+      position:absolute; inset:0; pointer-events:none;
+      background:radial-gradient(circle at 70% 50%, rgba(201,168,76,0.07) 0%, transparent 60%);
     }
-    @keyframes rotatePulse { from{transform:translate(-50%,-50%) rotate(0deg) scale(1);} 50%{transform:translate(-50%,-50%) rotate(180deg) scale(1.1);} to{transform:translate(-50%,-50%) rotate(360deg) scale(1);} }
-    .cta-box > * { position:relative; z-index:1; }
-    .cta-title { font-family:'Cinzel',serif; font-size:clamp(1.7rem,3.5vw,2.8rem); font-weight:700; margin-bottom:18px; line-height:1.2; }
-    .cta-desc { color:var(--muted); font-size:1rem; line-height:1.85; max-width:560px; margin:0 auto 44px; }
-    .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+    /* ── Slider side ── */
+    .cta-slider-side {
+      position:relative; overflow:hidden; border-radius:32px 0 0 32px;
+      min-height:460px;
+    }
+    .cta-slides {
+      display:flex; height:100%;
+      transition:transform 0.75s cubic-bezier(.77,0,.18,1);
+    }
+    .cta-slide {
+      min-width:100%; height:100%; position:relative; flex-shrink:0;
+    }
+    .cta-slide img {
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+    .cta-slide-ph {
+      width:100%; height:100%; min-height:460px;
+      background:linear-gradient(145deg,#141414,#1c1c1c);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    }
+    .cta-slide-ph i { font-size:4rem; color:var(--gold); opacity:0.18; }
+    .cta-slide-ph p { font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    /* dark-to-right gradient so text side blends nicely */
+    .cta-slider-side::after {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:linear-gradient(to right, transparent 55%, rgba(6,6,6,0.55) 100%);
+    }
+    /* dots */
+    .cta-dots {
+      position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+      display:flex; gap:8px; z-index:4;
+    }
+    .cta-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:rgba(255,255,255,0.25); border:none; cursor:pointer; padding:0;
+      transition:all 0.3s;
+    }
+    .cta-dot.active { background:var(--gold); transform:scale(1.3); }
+    /* arrow buttons */
+    .cta-arrow {
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:38px; height:38px; border-radius:50%;
+      background:rgba(6,6,6,0.55); border:1px solid rgba(201,168,76,0.35);
+      color:var(--gold); font-size:0.85rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      z-index:4; transition:all 0.3s; backdrop-filter:blur(8px);
+    }
+    .cta-arrow:hover { background:var(--gold); color:var(--black); }
+    .cta-arrow.prev { left:12px; }
+    .cta-arrow.next { right:12px; }
+
+    /* ── Text side ── */
+    .cta-text-side {
+      padding:64px 56px; display:flex; flex-direction:column;
+      justify-content:center; position:relative; z-index:1;
+    }
+    .cta-title { font-family:'Cinzel',serif; font-size:clamp(1.5rem,3vw,2.4rem); font-weight:700; margin-bottom:18px; line-height:1.2; }
+    .cta-desc { color:var(--muted); font-size:0.95rem; line-height:1.85; margin-bottom:40px; }
+    .cta-row { display:flex; gap:14px; flex-wrap:wrap; }
 
     /* ─── FOOTER ─── */
     footer { background:var(--dark); border-top:1px solid var(--border); padding:52px 0; }
@@ -400,6 +535,9 @@
     .reveal.in, .reveal-l.in, .reveal-r.in { opacity:1; transform:none; }
     .d1{transition-delay:.1s;} .d2{transition-delay:.18s;} .d3{transition-delay:.26s;}
     .d4{transition-delay:.34s;} .d5{transition-delay:.42s;} .d6{transition-delay:.50s;}
+    .d7{transition-delay:.58s;} .d8{transition-delay:.66s;} .d9{transition-delay:.74s;}
+    .d10{transition-delay:.82s;} .d11{transition-delay:.90s;} .d12{transition-delay:.98s;}
+    .d13{transition-delay:1.06s;} .d14{transition-delay:1.14s;}
 
     /* ─── RESPONSIVE ─── */
     @media(max-width:960px){
@@ -410,15 +548,19 @@
       .about-grid{grid-template-columns:1fr; gap:52px;}
       .about-badge{right:-12px;}
       .stats-bar{padding:24px 28px;}
-      .cta-box{padding:56px 32px;}
+      .cta-box{grid-template-columns:1fr;}
+      .cta-slider-side{border-radius:32px 32px 0 0; min-height:280px;}
+      .cta-text-side{padding:40px 32px;}
     }
     @media(max-width:600px){
       .hero-wrap{padding:110px 16px 56px;}
       .prod-grid{grid-template-columns:1fr 1fr; gap:14px;}
       section{padding:76px 0;}
+      .testi-photo-grid{grid-template-columns:1fr 1fr;}
     }
     @media(max-width:400px){
       .prod-grid{grid-template-columns:1fr;}
+      .testi-photo-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -492,17 +634,14 @@
       <!-- FOTO PROFIL -->
       <div class="about-img-wrap reveal-l">
         <div class="about-frame">
-          <!-- ▼▼▼ GANTI PLACEHOLDER INI DENGAN FOTO ANDA ▼▼▼ -->
-          <!-- Cara 1: <img src="URL_FOTO_ANDA" alt="Pemilik Antasena Merch"> -->
-          <!-- Cara 2: Upload foto lalu masukkan path-nya sebagai src -->
-          <div class="about-placeholder">
+          <img src="fotopemilik.jpg" alt="Pemilik Antasena Merch" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="about-placeholder" style="display:none;">
             <i class="fas fa-user-circle"></i>
             <p>Foto Pemilik</p>
           </div>
-          <!-- ▲▲▲ SELESAI ▲▲▲ -->
           <div class="photo-hint">
             <i class="fas fa-camera" style="font-size:2rem;color:var(--gold);"></i>
-            <span>Masukkan Foto Anda</span>
+            <span>Pemilik Antasena Merch</span>
           </div>
         </div>
         <div class="about-deco"></div>
@@ -574,155 +713,289 @@
     </div>
 
     <div class="filter-row reveal">
-      <button class="f-btn active" onclick="setFilter(this)">Semua</button>
-      <button class="f-btn" onclick="setFilter(this)">Kaos</button>
-      <button class="f-btn" onclick="setFilter(this)">Hoodie</button>
-      <button class="f-btn" onclick="setFilter(this)">Aksesoris</button>
-      <button class="f-btn" onclick="setFilter(this)">Topi</button>
+      <button class="f-btn active" onclick="setFilter(this,'all')">Semua</button>
+      <button class="f-btn" onclick="setFilter(this,'pakaian')">Pakaian</button>
+      <button class="f-btn" onclick="setFilter(this,'aksesoris')">Aksesoris</button>
+      <button class="f-btn" onclick="setFilter(this,'custom')">Custom</button>
     </div>
 
     <div class="prod-grid">
 
-      <!-- ══ PRODUK 1 ══ -->
-      <div class="prod-card reveal d1">
+      <!-- ══ PRODUK 1 — Tambler ══ -->
+      <div class="prod-card reveal d1" data-cat="custom">
         <div class="prod-img-wrap">
-          <!-- ▼ FOTO PRODUK 1: hapus div .prod-placeholder lalu taruh <img src="..." class="prod-placeholder"> -->
-          <div class="prod-placeholder">
-            <i class="fas fa-tshirt"></i>
-            <p>Foto Produk 1</p>
-          </div>
-          <!-- ▲ selesai -->
+          <img src="tambler.jpg" alt="Tambler Bebas Desain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-mug-hot"></i><p>Tambler</p></div>
           <div class="prod-overlay">
-            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Premium%20Edition" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Tambler%20Bebas%20Desain" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
               <i class="fab fa-whatsapp"></i> Pesan via WA
             </a>
           </div>
         </div>
         <div class="prod-body">
-          <span class="prod-tag">✦ New Arrival</span>
-          <div class="prod-name">Kaos Premium Edition</div>
-          <div class="prod-price">Rp 120.000 <span>/ pcs</span></div>
-          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Premium%20Edition" class="prod-btn" target="_blank">
+          <span class="prod-tag">✦ Custom</span>
+          <div class="prod-name">Tambler Bebas Desain</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Tambler%20Bebas%20Desain" class="prod-btn" target="_blank">
             <i class="fab fa-whatsapp"></i>Pesan Sekarang
           </a>
         </div>
       </div>
 
-      <!-- ══ PRODUK 2 ══ -->
-      <div class="prod-card reveal d2">
+      <!-- ══ PRODUK 2 — Sweater ══ -->
+      <div class="prod-card reveal d2" data-cat="pakaian">
         <div class="prod-img-wrap">
-          <!-- ▼ FOTO PRODUK 2 -->
-          <div class="prod-placeholder">
-            <i class="fas fa-tshirt"></i>
-            <p>Foto Produk 2</p>
-          </div>
+          <img src="sweater.jpg" alt="Sweater" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-tshirt"></i><p>Sweater</p></div>
           <div class="prod-overlay">
-            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Hoodie%20Signature" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Sweater" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
               <i class="fab fa-whatsapp"></i> Pesan via WA
             </a>
           </div>
         </div>
         <div class="prod-body">
           <span class="prod-tag">✦ Best Seller</span>
-          <div class="prod-name">Hoodie Signature Series</div>
-          <div class="prod-price">Rp 250.000 <span>/ pcs</span></div>
-          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Hoodie%20Signature" class="prod-btn" target="_blank">
+          <div class="prod-name">Sweater</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Sweater" class="prod-btn" target="_blank">
             <i class="fab fa-whatsapp"></i>Pesan Sekarang
           </a>
         </div>
       </div>
 
-      <!-- ══ PRODUK 3 ══ -->
-      <div class="prod-card reveal d3">
+      <!-- ══ PRODUK 3 — Plakat ══ -->
+      <div class="prod-card reveal d3" data-cat="aksesoris">
         <div class="prod-img-wrap">
-          <!-- ▼ FOTO PRODUK 3 -->
-          <div class="prod-placeholder">
-            <i class="fas fa-hat-cowboy"></i>
-            <p>Foto Produk 3</p>
-          </div>
+          <img src="plakat.jpg" alt="Plakat" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-award"></i><p>Plakat</p></div>
           <div class="prod-overlay">
-            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Topi%20Baseball" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Plakat" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
               <i class="fab fa-whatsapp"></i> Pesan via WA
             </a>
           </div>
         </div>
         <div class="prod-body">
-          <span class="prod-tag">✦ Limited</span>
-          <div class="prod-name">Topi Baseball Exclusive</div>
-          <div class="prod-price">Rp 95.000 <span>/ pcs</span></div>
-          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Topi%20Baseball" class="prod-btn" target="_blank">
+          <span class="prod-tag">✦ Premium</span>
+          <div class="prod-name">Plakat</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Plakat" class="prod-btn" target="_blank">
             <i class="fab fa-whatsapp"></i>Pesan Sekarang
           </a>
         </div>
       </div>
 
-      <!-- ══ PRODUK 4 ══ -->
-      <div class="prod-card reveal d4">
+      <!-- ══ PRODUK 4 — Mug Custom ══ -->
+      <div class="prod-card reveal d4" data-cat="custom">
         <div class="prod-img-wrap">
-          <!-- ▼ FOTO PRODUK 4 -->
-          <div class="prod-placeholder">
-            <i class="fas fa-bag-shopping"></i>
-            <p>Foto Produk 4</p>
-          </div>
+          <img src="mugcostum.jpg" alt="Mug Custom" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-coffee"></i><p>Mug Custom</p></div>
           <div class="prod-overlay">
-            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Totebag%20Premium" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Mug%20Custom" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
               <i class="fab fa-whatsapp"></i> Pesan via WA
             </a>
           </div>
         </div>
         <div class="prod-body">
           <span class="prod-tag">✦ Trending</span>
-          <div class="prod-name">Totebag Premium</div>
-          <div class="prod-price">Rp 75.000 <span>/ pcs</span></div>
-          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Totebag%20Premium" class="prod-btn" target="_blank">
+          <div class="prod-name">Mug Custom</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Mug%20Custom" class="prod-btn" target="_blank">
             <i class="fab fa-whatsapp"></i>Pesan Sekarang
           </a>
         </div>
       </div>
 
-      <!-- ══ PRODUK 5 ══ -->
-      <div class="prod-card reveal d5">
+      <!-- ══ PRODUK 5 — ID Card ══ -->
+      <div class="prod-card reveal d5" data-cat="aksesoris">
         <div class="prod-img-wrap">
-          <!-- ▼ FOTO PRODUK 5 -->
-          <div class="prod-placeholder">
-            <i class="fas fa-tshirt"></i>
-            <p>Foto Produk 5</p>
-          </div>
+          <img src="idcard.jpg" alt="ID Card" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-id-card"></i><p>ID Card</p></div>
           <div class="prod-overlay">
-            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Oversize" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20ID%20Card" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Custom</span>
+          <div class="prod-name">ID Card</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20ID%20Card" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 6 — PDH Lengan Pendek ══ -->
+      <div class="prod-card reveal d6" data-cat="pakaian">
+        <div class="prod-img-wrap">
+          <img src="pdhpendek.jpg" alt="PDH Lengan Pendek" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-tshirt"></i><p>PDH Pendek</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20PDH%20Lengan%20Pendek" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
               <i class="fab fa-whatsapp"></i> Pesan via WA
             </a>
           </div>
         </div>
         <div class="prod-body">
           <span class="prod-tag">✦ Popular</span>
-          <div class="prod-name">Kaos Oversize Unisex</div>
-          <div class="prod-price">Rp 145.000 <span>/ pcs</span></div>
-          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Kaos%20Oversize" class="prod-btn" target="_blank">
+          <div class="prod-name">PDH Lengan Pendek</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20PDH%20Lengan%20Pendek" class="prod-btn" target="_blank">
             <i class="fab fa-whatsapp"></i>Pesan Sekarang
           </a>
         </div>
       </div>
 
-      <!-- ══ PRODUK 6 ══ -->
-      <div class="prod-card reveal d6">
+      <!-- ══ PRODUK 7 — NoteBook Mockup ══ -->
+      <div class="prod-card reveal d7" data-cat="aksesoris">
         <div class="prod-img-wrap">
-          <!-- ▼ FOTO PRODUK 6 -->
-          <div class="prod-placeholder">
-            <i class="fas fa-star"></i>
-            <p>Foto Produk 6</p>
-          </div>
+          <img src="nbmockup.jpg" alt="NoteBook Mockup" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-book"></i><p>NoteBook</p></div>
           <div class="prod-overlay">
-            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Paket%20Bundle" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20NoteBook%20Mockup" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ New Arrival</span>
+          <div class="prod-name">NoteBook Mockup</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20NoteBook%20Mockup" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 8 — Tas ══ -->
+      <div class="prod-card reveal d8" data-cat="aksesoris">
+        <div class="prod-img-wrap">
+          <img src="tas.jpg" alt="Tas" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-shopping-bag"></i><p>Tas</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Tas" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Trending</span>
+          <div class="prod-name">Tas</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Tas" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 9 — PDH Lengan Panjang ══ -->
+      <div class="prod-card reveal d9" data-cat="pakaian">
+        <div class="prod-img-wrap">
+          <img src="pdhpanjang.jpg" alt="PDH Lengan Panjang" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-tshirt"></i><p>PDH Panjang</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20PDH%20Lengan%20Panjang" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Best Seller</span>
+          <div class="prod-name">PDH Lengan Panjang</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20PDH%20Lengan%20Panjang" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 10 — Jersey ══ -->
+      <div class="prod-card reveal d10" data-cat="pakaian">
+        <div class="prod-img-wrap">
+          <img src="jersey.jpg" alt="Jersey" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-shirt"></i><p>Jersey</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Jersey" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Limited</span>
+          <div class="prod-name">Jersey</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Jersey" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 11 — Sakral Pencak Silat ══ -->
+      <div class="prod-card reveal d11" data-cat="pakaian">
+        <div class="prod-img-wrap">
+          <img src="sakralsilat.jpg" alt="Sakral Pencak Silat" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-star"></i><p>Sakral Silat</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Sakral%20Pencak%20Silat" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
               <i class="fab fa-whatsapp"></i> Pesan via WA
             </a>
           </div>
         </div>
         <div class="prod-body">
           <span class="prod-tag">✦ Special</span>
-          <div class="prod-name">Paket Bundle Spesial</div>
-          <div class="prod-price">Rp 350.000 <span>/ paket</span></div>
-          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Paket%20Bundle" class="prod-btn" target="_blank">
+          <div class="prod-name">Sakral Pencak Silat</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Sakral%20Pencak%20Silat" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 12 — Prapatan Tengah ══ -->
+      <div class="prod-card reveal d12" data-cat="pakaian">
+        <div class="prod-img-wrap">
+          <img src="prapatan.jpg" alt="Prapatan Tengah" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-tshirt"></i><p>Prapatan</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Prapatan%20Tengah" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Exclusive</span>
+          <div class="prod-name">Prapatan Tengah</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Prapatan%20Tengah" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 13 — Gantungan Kunci ══ -->
+      <div class="prod-card reveal d13" data-cat="aksesoris">
+        <div class="prod-img-wrap">
+          <img src="ganci.jpg" alt="Gantungan Kunci" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-key"></i><p>Gantungan Kunci</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Gantungan%20Kunci" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Aksesoris</span>
+          <div class="prod-name">Gantungan Kunci</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Gantungan%20Kunci" class="prod-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i>Pesan Sekarang
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ PRODUK 14 — Topi Bebas Desain ══ -->
+      <div class="prod-card reveal d14" data-cat="aksesoris">
+        <div class="prod-img-wrap">
+          <img src="Topi.jpg" alt="Topi Bebas Desain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="prod-placeholder" style="display:none;"><i class="fas fa-hat-cowboy"></i><p>Topi</p></div>
+          <div class="prod-overlay">
+            <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Topi%20Bebas%20Desain" class="prod-btn" target="_blank" style="border-color:rgba(255,255,255,0.4);color:#fff;">
+              <i class="fab fa-whatsapp"></i> Pesan via WA
+            </a>
+          </div>
+        </div>
+        <div class="prod-body">
+          <span class="prod-tag">✦ Custom</span>
+          <div class="prod-name">Topi Bebas Desain</div>
+          <a href="https://wa.me/6289538325018?text=Halo%20kak%2C%20saya%20mau%20pesan%20Topi%20Bebas%20Desain" class="prod-btn" target="_blank">
             <i class="fab fa-whatsapp"></i>Pesan Sekarang
           </a>
         </div>
@@ -741,119 +1014,546 @@
       <div class="s-line"></div>
     </div>
 
-    <div class="testi-grid">
-
-      <!-- T1 -->
-      <div class="testi-card reveal d1">
-        <div class="testi-head">
-          <!-- ▼ FOTO TESTIMONI 1: ganti div.testi-ava-ph dengan <img src="..." class="testi-ava"> -->
-          <div class="testi-ava-ph">A</div>
-          <div>
-            <div class="testi-name">Anisa Rahmawati</div>
-            <div class="testi-loc"><i class="fas fa-map-pin"></i> Semarang, Jawa Tengah</div>
-          </div>
-        </div>
-        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <p class="testi-txt">"Kualitasnya luar biasa! Bahan kaosnya adem dan nyaman dipakai sehari-hari. Desainnya keren banget, banyak yang nanya beli di mana. Packing rapi, pengiriman cepat. Pasti order lagi! ⭐⭐⭐⭐⭐"</p>
-        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Kaos Premium Edition</div>
-      </div>
-
-      <!-- T2 -->
-      <div class="testi-card reveal d2">
-        <div class="testi-head">
-          <div class="testi-ava-ph">R</div>
-          <div>
-            <div class="testi-name">Rizky Firmansyah</div>
-            <div class="testi-loc"><i class="fas fa-map-pin"></i> Brebes, Jawa Tengah</div>
-          </div>
-        </div>
-        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <p class="testi-txt">"Hoodie-nya kualitas premium banget! Hangat, tebal, dan gambarnya tidak mudah luntur meski dicuci berkali-kali. Pelayanan seller juga ramah dan responsif. Recommended banget buat yang cari merch berkualitas!"</p>
-        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Hoodie Signature Series</div>
-      </div>
-
-      <!-- T3 -->
-      <div class="testi-card reveal d3">
-        <div class="testi-head">
-          <div class="testi-ava-ph">D</div>
-          <div>
-            <div class="testi-name">Dewi Cahyani</div>
-            <div class="testi-loc"><i class="fas fa-map-pin"></i> Tegal, Jawa Tengah</div>
-          </div>
-        </div>
-        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <p class="testi-txt">"Udah pesan 3 kali dan selalu puas! Topi baseball-nya keren dan anti-kusut. Harga sangat worth it untuk kualitas segini. Seller juga fast respon. Two thumbs up! 👍👍"</p>
-        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Topi Baseball Exclusive</div>
-      </div>
-
-      <!-- T4 -->
-      <div class="testi-card reveal d4">
-        <div class="testi-head">
-          <div class="testi-ava-ph">F</div>
-          <div>
-            <div class="testi-name">Fajar Nugroho</div>
-            <div class="testi-loc"><i class="fas fa-map-pin"></i> Cirebon, Jawa Barat</div>
-          </div>
-        </div>
-        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <p class="testi-txt">"Totebagnya kuat banget, bisa nampung banyak barang dan jahitannya rapi. Desainnya estetik dan elegan. Sudah kupakai setiap hari dan masih awet. Antasena Merch memang juara!"</p>
-        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Totebag Premium</div>
-      </div>
-
-      <!-- T5 -->
-      <div class="testi-card reveal d5">
-        <div class="testi-head">
-          <div class="testi-ava-ph">S</div>
-          <div>
-            <div class="testi-name">Sinta Maharani</div>
-            <div class="testi-loc"><i class="fas fa-map-pin"></i> Purwokerto, Jawa Tengah</div>
-          </div>
-        </div>
-        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <p class="testi-txt">"Pesan paket bundle untuk keluarga dan hasilnya memuaskan! Semua bahan berkualitas dan nyaman dipakai. Harga sangat bersahabat untuk kualitas premium. Terima kasih Antasena Merch! 🙏"</p>
-        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Paket Bundle Spesial</div>
-      </div>
-
-      <!-- T6 -->
-      <div class="testi-card reveal d6">
-        <div class="testi-head">
-          <div class="testi-ava-ph">B</div>
-          <div>
-            <div class="testi-name">Budi Santoso</div>
-            <div class="testi-loc"><i class="fas fa-map-pin"></i> Slawi, Jawa Tengah</div>
-          </div>
-        </div>
-        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-        <p class="testi-txt">"Paling suka pelayanannya, ramah dan sabar melayani pesanan custom. Hasilnya sesuai ekspektasi bahkan melebihi! Kualitas sablon tahan lama, sudah 6 bulan masih bagus. Wajib coba!"</p>
-        <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Kaos Oversize Unisex</div>
-      </div>
-
+    <!-- Tabs -->
+    <div class="testi-tabs reveal">
+      <button class="t-tab active" onclick="switchTab(this,'ulasan')"><i class="fas fa-comment-dots"></i>Ulasan Pelanggan</button>
+      <button class="t-tab" onclick="switchTab(this,'foto')"><i class="fas fa-images"></i>Foto Produk</button>
     </div>
+
+    <!-- Panel: Ulasan -->
+    <div class="testi-panel active" id="panel-ulasan">
+      <div class="testi-grid">
+
+        <!-- T1 -->
+        <div class="testi-card reveal d1">
+          <div class="testi-head">
+            <img src="testimoni1.jpg" class="testi-ava" alt="Anisa" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">A</div>
+            <div>
+              <div class="testi-name">Anisa Rahmawati</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Semarang, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Kualitasnya luar biasa! Bahan kaosnya adem dan nyaman dipakai sehari-hari. Desainnya keren banget, banyak yang nanya beli di mana. Packing rapi, pengiriman cepat. Pasti order lagi! ⭐⭐⭐⭐⭐"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Kaos Premium Edition</div>
+        </div>
+
+        <!-- T2 -->
+        <div class="testi-card reveal d2">
+          <div class="testi-head">
+            <img src="testimoni2.jpg" class="testi-ava" alt="Rizky" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">R</div>
+            <div>
+              <div class="testi-name">Rizky Firmansyah</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Brebes, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Hoodie-nya kualitas premium banget! Hangat, tebal, dan gambarnya tidak mudah luntur meski dicuci berkali-kali. Pelayanan seller juga ramah dan responsif. Recommended banget buat yang cari merch berkualitas!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Hoodie Signature Series</div>
+        </div>
+
+        <!-- T3 -->
+        <div class="testi-card reveal d3">
+          <div class="testi-head">
+            <img src="testimoni3.jpg" class="testi-ava" alt="Dewi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">D</div>
+            <div>
+              <div class="testi-name">Dewi Cahyani</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Tegal, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Udah pesan 3 kali dan selalu puas! Topi baseball-nya keren dan anti-kusut. Harga sangat worth it untuk kualitas segini. Seller juga fast respon. Two thumbs up! 👍👍"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Topi Baseball Exclusive</div>
+        </div>
+
+        <!-- T4 -->
+        <div class="testi-card reveal d4">
+          <div class="testi-head">
+            <img src="testimoni4.jpg" class="testi-ava" alt="Fajar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">F</div>
+            <div>
+              <div class="testi-name">Fajar Nugroho</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Cirebon, Jawa Barat</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Totebagnya kuat banget, bisa nampung banyak barang dan jahitannya rapi. Desainnya estetik dan elegan. Sudah kupakai setiap hari dan masih awet. Antasena Merch memang juara!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Totebag Premium</div>
+        </div>
+
+        <!-- T5 -->
+        <div class="testi-card reveal d5">
+          <div class="testi-head">
+            <img src="testimoni5.jpg" class="testi-ava" alt="Sinta" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">S</div>
+            <div>
+              <div class="testi-name">Sinta Maharani</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Purwokerto, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Pesan paket bundle untuk keluarga dan hasilnya memuaskan! Semua bahan berkualitas dan nyaman dipakai. Harga sangat bersahabat untuk kualitas premium. Terima kasih Antasena Merch! 🙏"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Paket Bundle Spesial</div>
+        </div>
+
+        <!-- T6 -->
+        <div class="testi-card reveal d6">
+          <div class="testi-head">
+            <img src="testimoni6.jpg" class="testi-ava" alt="Budi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">B</div>
+            <div>
+              <div class="testi-name">Budi Santoso</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Slawi, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Paling suka pelayanannya, ramah dan sabar melayani pesanan custom. Hasilnya sesuai ekspektasi bahkan melebihi! Kualitas sablon tahan lama, sudah 6 bulan masih bagus. Wajib coba!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Kaos Oversize Unisex</div>
+        </div>
+
+        <!-- T7 -->
+        <div class="testi-card reveal d7">
+          <div class="testi-head">
+            <img src="testimoni7.jpg" class="testi-ava" alt="Hendra" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">H</div>
+            <div>
+              <div class="testi-name">Hendra Wijaya</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Pemalang, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Sweater-nya mantap! Bahan tebal dan jahitan rapi banget. Desainnya simpel tapi elegan. Pelayanannya cepat dan ramah. Sudah rekomendasikan ke teman-teman!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Sweater</div>
+        </div>
+
+        <!-- T8 -->
+        <div class="testi-card reveal d8">
+          <div class="testi-head">
+            <img src="testimoni8.jpg" class="testi-ava" alt="Rina" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">R</div>
+            <div>
+              <div class="testi-name">Rina Anggraeni</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Kendal, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Pesan mug custom untuk hadiah ulang tahun teman, hasilnya bagus banget! Cetakannya jelas dan tidak mudah pudar. Packing juga aman, tidak ada yang pecah. Super recommended!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Mug Custom</div>
+        </div>
+
+        <!-- T9 -->
+        <div class="testi-card reveal d9">
+          <div class="testi-head">
+            <img src="testimoni9.jpg" class="testi-ava" alt="Doni" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">D</div>
+            <div>
+              <div class="testi-name">Doni Prasetyo</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Pekalongan, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"PDH lengan panjangnya kece abis! Cocok untuk kegiatan organisasi maupun formal. Warna tidak cepat pudar meski sering dicuci. Terima kasih Antasena Merch! 🔥"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — PDH Lengan Panjang</div>
+        </div>
+
+        <!-- T10 -->
+        <div class="testi-card reveal d10">
+          <div class="testi-head">
+            <img src="testimoni10.jpg" class="testi-ava" alt="Mega" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">M</div>
+            <div>
+              <div class="testi-name">Mega Lestari</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Cilacap, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Jersey untuk tim futsal kami kualitasnya top banget! Bahan adem, desain sesuai request, dan pengerjaan cepat. Tim kami makin semangat main karena jerseynya keren!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Jersey</div>
+        </div>
+
+        <!-- T11 -->
+        <div class="testi-card reveal d11">
+          <div class="testi-head">
+            <img src="testimoni11.jpg" class="testi-ava" alt="Yusuf" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">Y</div>
+            <div>
+              <div class="testi-name">Yusuf Hidayat</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Magelang, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Plakat untuk acara wisuda teman terasa sangat berkelas! Ukiran dan desainnya detail, kualitas materialnya mewah. Seller responsif dan pengiriman tepat waktu. Sangat puas!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Plakat</div>
+        </div>
+
+        <!-- T12 -->
+        <div class="testi-card reveal d12">
+          <div class="testi-head">
+            <img src="testimoni12.jpg" class="testi-ava" alt="Fitri" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">F</div>
+            <div>
+              <div class="testi-name">Fitri Handayani</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Kebumen, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"ID Card untuk organisasi kampus kami hasilnya memuaskan sekali! Print-nya tajam, laminasi rapi, dan tali ID-nya berkualitas. Bakal order lagi untuk periode berikutnya!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — ID Card</div>
+        </div>
+
+        <!-- T13 -->
+        <div class="testi-card reveal d13">
+          <div class="testi-head">
+            <img src="testimoni13.jpg" class="testi-ava" alt="Agus" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">A</div>
+            <div>
+              <div class="testi-name">Agus Mulyono</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Wonosobo, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Tambler-nya bagus banget! Bahan stainless premium, cetakannya awet tidak mudah pudar. Desain bebas sesuai keinginan dan hasilnya memuaskan. Perfect buat hadiah!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Tambler Bebas Desain</div>
+        </div>
+
+        <!-- T14 -->
+        <div class="testi-card reveal d14">
+          <div class="testi-head">
+            <img src="testimoni14.jpg" class="testi-ava" alt="Novi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">N</div>
+            <div>
+              <div class="testi-name">Novi Rahayu</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Banyumas, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"NoteBook mockup-nya cantik dan elegan! Cover hardcover tebal, kertas berkualitas, dan desain sesuai request. Cocok untuk hadiah korporat maupun personal. Puas banget!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — NoteBook Mockup</div>
+        </div>
+
+        <!-- T15 -->
+        <div class="testi-card reveal">
+          <div class="testi-head">
+            <img src="testimoni15.jpg" class="testi-ava" alt="Wahyu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">W</div>
+            <div>
+              <div class="testi-name">Wahyu Setiawan</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Purbalingga, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Tas-nya kuat dan desainnya modern banget! Bahan canvas tebal, jahitan rapi, dan ritsleting mulus. Sudah kubawa ke mana-mana dan masih awet. Worth every penny!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Tas</div>
+        </div>
+
+        <!-- T16 -->
+        <div class="testi-card reveal">
+          <div class="testi-head">
+            <img src="testimoni16.jpg" class="testi-ava" alt="Laila" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">L</div>
+            <div>
+              <div class="testi-name">Laila Nurfaizah</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Batang, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Gantungan kunci custom untuk souvenir acara kami hasilnya mewah! Desain tercetak jelas, material solid, dan finishing rapi. Semua tamu suka! Terima kasih banyak 🙏"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Gantungan Kunci</div>
+        </div>
+
+        <!-- T17 -->
+        <div class="testi-card reveal">
+          <div class="testi-head">
+            <img src="testimoni17.jpg" class="testi-ava" alt="Eko" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="testi-ava-ph" style="display:none;">E</div>
+            <div>
+              <div class="testi-name">Eko Susanto</div>
+              <div class="testi-loc"><i class="fas fa-map-pin"></i> Demak, Jawa Tengah</div>
+            </div>
+          </div>
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="testi-txt">"Topi bebas desain-nya keren dan berkelas! Fitting pas, bahan breathable, dan bordirannya halus. Sudah repeat order 3 kali karena kualitasnya konsisten. Antasena Merch the best!"</p>
+          <div class="testi-foot"><i class="fas fa-check-circle"></i> Verified Buyer — Topi Bebas Desain</div>
+        </div>
+
+      </div><!-- /testi-grid -->
+    </div><!-- /panel-ulasan -->
+
+    <!-- Panel: Foto Produk -->
+    <div class="testi-panel" id="panel-foto">
+      <div class="testi-photo-grid">
+
+        <div class="testi-photo-card reveal d1" onclick="openLightbox('testimoni1.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni1.jpg" alt="Foto Testimoni 1" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #01</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d2" onclick="openLightbox('testimoni2.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni2.jpg" alt="Foto Testimoni 2" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #02</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d3" onclick="openLightbox('testimoni3.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni3.jpg" alt="Foto Testimoni 3" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #03</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d4" onclick="openLightbox('testimoni4.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni4.jpg" alt="Foto Testimoni 4" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #04</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d5" onclick="openLightbox('testimoni5.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni5.jpg" alt="Foto Testimoni 5" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #05</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d6" onclick="openLightbox('testimoni6.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni6.jpg" alt="Foto Testimoni 6" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #06</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d7" onclick="openLightbox('testimoni7.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni7.jpg" alt="Foto Testimoni 7" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #07</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d8" onclick="openLightbox('testimoni8.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni8.jpg" alt="Foto Testimoni 8" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #08</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d9" onclick="openLightbox('testimoni9.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni9.jpg" alt="Foto Testimoni 9" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #09</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d10" onclick="openLightbox('testimoni10.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni10.jpg" alt="Foto Testimoni 10" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #10</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d11" onclick="openLightbox('testimoni11.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni11.jpg" alt="Foto Testimoni 11" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #11</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d12" onclick="openLightbox('testimoni12.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni12.jpg" alt="Foto Testimoni 12" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #12</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d13" onclick="openLightbox('testimoni13.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni13.jpg" alt="Foto Testimoni 13" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #13</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal d14" onclick="openLightbox('testimoni14.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni14.jpg" alt="Foto Testimoni 14" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #14</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal" onclick="openLightbox('testimoni15.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni15.jpg" alt="Foto Testimoni 15" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #15</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal" onclick="openLightbox('testimoni16.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni16.jpg" alt="Foto Testimoni 16" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #16</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="testi-photo-card reveal" onclick="openLightbox('testimoni17.jpg')">
+          <div class="testi-photo-wrap">
+            <img src="testimoni17.jpg" alt="Foto Testimoni 17" onerror="this.src=''; this.parentElement.style.background='#1a1a1a';">
+            <div class="testi-photo-overlay"><span class="testi-photo-label">Lihat Foto</span></div>
+          </div>
+          <div class="testi-photo-foot">
+            <span class="testi-photo-num">Foto #17</span>
+            <div class="testi-photo-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          </div>
+        </div>
+
+      </div><!-- /testi-photo-grid -->
+    </div><!-- /panel-foto -->
+
   </div>
 </section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="Foto Testimoni">
+</div>
 
 <!-- ═══════════ CTA / CONTACT ═══════════ -->
 <section id="contact">
   <div class="container">
     <div class="cta-box reveal">
       <div class="cta-glow"></div>
-      <h2 class="cta-title">Siap Pesan Produk <span class="gold-text">Premium</span> Anda?</h2>
-      <p class="cta-desc">
-        Hubungi kami sekarang dan dapatkan konsultasi gratis. Kami siap membantu
-        mewujudkan merchandise impian Anda dengan kualitas terbaik dan harga terjangkau.
-      </p>
-      <div class="cta-row">
-        <a href="https://wa.me/6289538325018?text=Halo%20Antasena%20Merch!%20Saya%20ingin%20memesan%20produk." class="btn-gold" target="_blank">
-          <i class="fab fa-whatsapp"></i>Chat WhatsApp
-        </a>
-        <a href="https://www.instagram.com/antasena_merch?igsh=MTlrM3d6MXZhZGw5Zw==" class="btn-outline" target="_blank">
-          <i class="fab fa-instagram"></i>Instagram
-        </a>
-        <a href="https://www.tiktok.com/@coach_ary22?_r=1&_t=ZS-96NdPGdEyUU" class="btn-outline" target="_blank">
-          <i class="fab fa-tiktok"></i>TikTok
-        </a>
-      </div>
-    </div>
+
+      <!-- ── SLIDER KIRI ── -->
+      <div class="cta-slider-side">
+        <div class="cta-slides" id="ctaSlides">
+
+          <!-- Slide 1 -->
+          <div class="cta-slide">
+            <img src="fotokontak1.jpg" alt="Foto Kontak 1"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="cta-slide-ph" style="display:none;">
+              <i class="fas fa-image"></i>
+              <p>fotokontak1.jpg</p>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="cta-slide">
+            <img src="fotokontak2.jpg" alt="Foto Kontak 2"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="cta-slide-ph" style="display:none;">
+              <i class="fas fa-image"></i>
+              <p>fotokontak2.jpg</p>
+            </div>
+          </div>
+
+        </div><!-- /cta-slides -->
+
+        <!-- Arrow prev -->
+        <button class="cta-arrow prev" onclick="ctaSlide(-1)" aria-label="Sebelumnya">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <!-- Arrow next -->
+        <button class="cta-arrow next" onclick="ctaSlide(1)" aria-label="Berikutnya">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Dots -->
+        <div class="cta-dots" id="ctaDots">
+          <button class="cta-dot active" onclick="ctaGoTo(0)"></button>
+          <button class="cta-dot"        onclick="ctaGoTo(1)"></button>
+        </div>
+      </div><!-- /cta-slider-side -->
+
+      <!-- ── TEKS KANAN ── -->
+      <div class="cta-text-side">
+        <h2 class="cta-title">Siap Pesan Produk <span class="gold-text">Premium</span> Anda?</h2>
+        <p class="cta-desc">
+          Hubungi kami sekarang dan dapatkan konsultasi gratis. Kami siap membantu
+          mewujudkan merchandise impian Anda dengan kualitas terbaik dan harga terjangkau.
+        </p>
+        <div class="cta-row">
+          <a href="https://wa.me/6289538325018?text=Halo%20Antasena%20Merch!%20Saya%20ingin%20memesan%20produk." class="btn-gold" target="_blank">
+            <i class="fab fa-whatsapp"></i>Chat WhatsApp
+          </a>
+          <a href="https://www.instagram.com/antasena_merch?igsh=MTlrM3d6MXZhZGw5Zw==" class="btn-outline" target="_blank">
+            <i class="fab fa-instagram"></i>Instagram
+          </a>
+          <a href="https://www.tiktok.com/@coach_ary22?_r=1&_t=ZS-96NdPGdEyUU" class="btn-outline" target="_blank">
+            <i class="fab fa-tiktok"></i>TikTok
+          </a>
+        </div>
+      </div><!-- /cta-text-side -->
+
+    </div><!-- /cta-box -->
   </div>
 </section>
 
@@ -922,11 +1622,68 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
   revEls.forEach(el => ro.observe(el));
 
-  // ── Filter buttons ──
-  function setFilter(btn) {
+  // ── Product Filter ──
+  function setFilter(btn, cat) {
     document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    document.querySelectorAll('.prod-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
   }
+
+  // ── Testimonial Tabs ──
+  function switchTab(btn, panel) {
+    document.querySelectorAll('.t-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.testi-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + panel).classList.add('active');
+    // Re-trigger reveals for newly visible items
+    setTimeout(() => {
+      document.querySelectorAll('#panel-' + panel + ' .reveal').forEach(el => {
+        if (!el.classList.contains('in')) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight) el.classList.add('in');
+        }
+      });
+    }, 50);
+  }
+
+  // ── Lightbox ──
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  // ── CTA Slider ──
+  let ctaCurrent = 0;
+  const ctaTotal = 2;
+  const ctaSlidesEl = document.getElementById('ctaSlides');
+  const ctaDotsEl   = document.querySelectorAll('.cta-dot');
+
+  function ctaUpdateUI() {
+    ctaSlidesEl.style.transform = `translateX(-${ctaCurrent * 100}%)`;
+    ctaDotsEl.forEach((d, i) => d.classList.toggle('active', i === ctaCurrent));
+  }
+  function ctaSlide(dir) {
+    ctaCurrent = (ctaCurrent + dir + ctaTotal) % ctaTotal;
+    ctaUpdateUI();
+  }
+  function ctaGoTo(idx) {
+    ctaCurrent = idx;
+    ctaUpdateUI();
+  }
+  // Auto-slide setiap 4 detik
+  setInterval(() => ctaSlide(1), 4000);
 
   // ── Smooth active nav link highlight ──
   const sections = document.querySelectorAll('section[id]');
